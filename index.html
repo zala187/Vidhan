@@ -1,0 +1,1121 @@
+Content is user-generated and unverified.
+
+
+14
+Learn about artifacts
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vidhaan — DPDP Act Compliance Scanner</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080b14;--bg2:#0c1120;--bg3:#0f1526;
+  --surf:rgba(255,255,255,.045);--surf2:rgba(255,255,255,.075);--surf3:rgba(255,255,255,.11);
+  --ln:rgba(255,255,255,.09);--ln2:rgba(255,255,255,.17);
+  --ink:#eef0fb;--ink2:#c2c8e6;--ink3:#8991b8;--ink4:#565f85;
+  --indigo:#5468ff;--indigo2:#3d4de6;--indigol:rgba(84,104,255,.14);
+  --violet:#9b5de5;--violet2:#7f3fd1;--violetl:rgba(155,93,229,.14);
+  --cyan:#21e6c1;--cyan2:#0fc9a6;--cyanl:rgba(33,230,193,.14);
+  --amber:#ffb020;--amberl:rgba(255,176,32,.14);
+  --coral:#ff5470;--corall:rgba(255,84,112,.14);
+  --grad:linear-gradient(115deg,#5468ff 0%,#9b5de5 55%,#21e6c1 100%);
+  --grad2:linear-gradient(115deg,#5468ff,#9b5de5);
+  --disp:'Space Grotesk',sans-serif;--body:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
+  --r:12px;--r2:16px;--r3:22px;
+  --sh:0 1px 2px rgba(0,0,0,.3);--sh2:0 10px 40px rgba(0,0,0,.45);--shg:0 0 0 1px var(--ln),0 20px 60px rgba(84,104,255,.12);
+}
+body.light{
+  --bg:#f3f5fc;--bg2:#ffffff;--bg3:#f7f8fd;
+  --surf:rgba(20,25,50,.03);--surf2:rgba(20,25,50,.05);--surf3:rgba(20,25,50,.08);
+  --ln:rgba(20,25,50,.09);--ln2:rgba(20,25,50,.16);
+  --ink:#0c1020;--ink2:#3a4266;--ink3:#6b7396;--ink4:#9aa1c0;
+}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.55;overflow-x:hidden;transition:background .25s ease,color .25s ease}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--ln2);border-radius:99px}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.mono{font-family:var(--mono)}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.glass{background:var(--surf);border:1px solid var(--ln);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+
+/* ═══════════ SHARED ═══════════ */
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:11px;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid transparent;font-family:var(--body);transition:.16s;white-space:nowrap}
+.btn-grad{background:var(--grad);color:#fff;box-shadow:0 6px 24px rgba(84,104,255,.35)}
+.btn-grad:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(84,104,255,.5)}
+.btn-ghost{background:var(--surf2);border-color:var(--ln2);color:var(--ink)}
+.btn-ghost:hover{background:var(--surf3)}
+.btn-outline{background:transparent;border-color:var(--ln2);color:var(--ink2)}
+.btn-outline:hover{border-color:var(--indigo);color:var(--ink)}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:9px}
+.btn-block{width:100%;justify-content:center}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:5px 12px;border-radius:99px}
+.card{background:var(--surf);border:1px solid var(--ln);border-radius:var(--r2)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.eyebrow::before{content:'';width:16px;height:1.5px;background:var(--cyan)}
+.hidden{display:none !important}
+input,select,textarea{font-family:var(--body);color:var(--ink);background:var(--surf2);border:1.5px solid var(--ln2);border-radius:10px;padding:11px 14px;font-size:13.5px;outline:none;transition:.15s}
+input:focus,select:focus,textarea:focus{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigol)}
+label{display:block;font-size:11.5px;font-weight:600;color:var(--ink3);margin-bottom:6px}
+
+/* ═══════════ TOAST ═══════════ */
+.toast-el{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#12172a;color:#fff;padding:12px 24px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;box-shadow:var(--sh2);display:none;border:1px solid var(--ln2);white-space:nowrap}
+
+/* ═══════════ NAVBAR (public) ═══════════ */
+.pubnav{position:sticky;top:0;z-index:100;background:rgba(8,11,20,.72);backdrop-filter:blur(16px);border-bottom:1px solid var(--ln)}
+body.light .pubnav{background:rgba(243,245,252,.78)}
+.pubnav-in{max-width:1180px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;gap:30px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:-.3px;flex-shrink:0}
+.logo-mark{width:32px;height:32px;border-radius:9px;background:var(--grad);display:grid;place-items:center;flex-shrink:0;position:relative}
+.logo-mark svg{width:17px;height:17px}
+.pubnav-links{display:flex;gap:26px;flex:1}
+.pubnav-links a{font-size:13.5px;font-weight:500;color:var(--ink3);transition:.13s}
+.pubnav-links a:hover{color:var(--ink)}
+.pubnav-r{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.theme-toggle{width:36px;height:36px;border-radius:9px;border:1.5px solid var(--ln2);background:var(--surf2);display:grid;place-items:center;cursor:pointer;font-size:15px}
+.nav-burger{display:none;width:36px;height:36px;border-radius:9px;border:1.5px solid var(--ln2);background:var(--surf2);cursor:pointer;font-size:16px}
+
+/* ═══════════ HERO ═══════════ */
+.hero{position:relative;overflow:hidden;padding:88px 0 70px}
+.hero-glow1{position:absolute;top:-220px;right:-160px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(84,104,255,.22),transparent 70%);pointer-events:none;filter:blur(10px)}
+.hero-glow2{position:absolute;bottom:-260px;left:-160px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(33,230,193,.14),transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 60% 50% at 50% 0%,#000 10%,transparent 70%);opacity:.5;pointer-events:none}
+.hero-in{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+.hero-h1{font-family:var(--disp);font-size:44px;font-weight:800;line-height:1.09;letter-spacing:-1.4px;margin-bottom:18px}
+.hero-sub{font-size:15.5px;color:var(--ink3);line-height:1.7;max-width:480px;margin-bottom:28px}
+.hero-scan-row{display:flex;gap:10px;background:var(--surf2);border:1.5px solid var(--ln2);border-radius:14px;padding:7px;max-width:520px}
+.hero-scan-row input{flex:1;background:none;border:none;padding:11px 12px;font-family:var(--mono);font-size:13.5px}
+.hero-scan-row input:focus{box-shadow:none}
+.hero-stats{display:flex;gap:30px;margin-top:26px}
+.hstat b{font-family:var(--disp);font-size:22px;font-weight:800;display:block}
+.hstat span{font-size:11px;color:var(--ink4);text-transform:uppercase;letter-spacing:.6px}
+/* live terminal */
+.term{border-radius:var(--r3);overflow:hidden;box-shadow:var(--shg);background:#0a0e1c;border:1px solid var(--ln2)}
+.term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--ln);background:rgba(255,255,255,.02)}
+.term-dot{width:10px;height:10px;border-radius:50%}
+.term-title{margin-left:8px;font-family:var(--mono);font-size:11px;color:var(--ink4)}
+.term-body{padding:20px;font-family:var(--mono);font-size:12.5px;min-height:280px}
+.term-line{display:flex;align-items:center;gap:9px;padding:6px 0;color:var(--ink3);opacity:0;animation:tfi .35s ease forwards}
+@keyframes tfi{to{opacity:1}}
+.term-ic{width:15px;flex-shrink:0;text-align:center}
+.term-line.pass .term-ic{color:var(--cyan)}
+.term-line.fail .term-ic{color:var(--coral)}
+.term-score{margin-top:14px;padding-top:14px;border-top:1px dashed var(--ln2);display:flex;align-items:center;justify-content:space-between}
+.term-score b{font-family:var(--disp);font-size:26px;color:var(--cyan)}
+
+/* ═══════════ LOGOS STRIP ═══════════ */
+.strip{padding:26px 0;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)}
+.strip-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;color:var(--ink4);font-size:12px;font-weight:600;letter-spacing:.4px}
+
+/* ═══════════ SECTION HEADER ═══════════ */
+.sec{padding:84px 0}
+.sec-head{max-width:640px;margin-bottom:48px}
+.sec-h2{font-family:var(--disp);font-size:32px;font-weight:800;letter-spacing:-.8px;line-height:1.15;margin-bottom:12px}
+.sec-p{color:var(--ink3);font-size:14.5px;line-height:1.7}
+
+/* ═══════════ CHECKLIST FEATURE GRID ═══════════ */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat-card{padding:24px;border-radius:var(--r2);transition:.18s}
+.feat-card:hover{border-color:var(--ln2);transform:translateY(-3px)}
+.feat-ic{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:19px;margin-bottom:16px}
+.feat-t{font-family:var(--disp);font-weight:700;font-size:15.5px;margin-bottom:7px}
+.feat-d{font-size:12.5px;color:var(--ink3);line-height:1.6}
+
+/* ═══════════ HOW IT WORKS ═══════════ */
+.steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative}
+.step{padding:0 20px;position:relative}
+.step:not(:first-child)::before{content:'';position:absolute;top:22px;left:-8px;width:16px;height:1.5px;background:var(--ln2)}
+.step-n{font-family:var(--mono);font-size:12px;color:var(--cyan);font-weight:700;margin-bottom:14px}
+.step-t{font-family:var(--disp);font-weight:700;font-size:17px;margin-bottom:8px}
+.step-d{font-size:12.5px;color:var(--ink3);line-height:1.65}
+
+/* ═══════════ PRICING ═══════════ */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.price-card{padding:28px;border-radius:var(--r2);position:relative}
+.price-card.feat{border-color:var(--indigo);box-shadow:0 0 0 1px var(--indigo),0 20px 50px rgba(84,104,255,.18)}
+.price-badge{position:absolute;top:-11px;right:24px;background:var(--grad);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:99px}
+.price-t{font-family:var(--disp);font-weight:700;font-size:16px;margin-bottom:6px}
+.price-n{font-family:var(--disp);font-size:34px;font-weight:800;margin:12px 0 4px;letter-spacing:-1px}
+.price-n span{font-size:13px;color:var(--ink4);font-weight:500}
+.price-list{margin:20px 0;display:flex;flex-direction:column;gap:10px}
+.price-list li{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--ink2);list-style:none}
+.price-list li::before{content:'✓';color:var(--cyan);font-weight:700;flex-shrink:0}
+
+/* ═══════════ FAQ ═══════════ */
+.faq-item{border-bottom:1px solid var(--ln);padding:20px 0;cursor:pointer}
+.faq-q{display:flex;justify-content:space-between;align-items:center;font-family:var(--disp);font-weight:600;font-size:15px}
+.faq-ic{font-size:18px;color:var(--ink4);transition:.2s}
+.faq-item.open .faq-ic{transform:rotate(45deg);color:var(--cyan)}
+.faq-a{max-height:0;overflow:hidden;transition:.25s ease;font-size:13px;color:var(--ink3);line-height:1.7}
+.faq-item.open .faq-a{max-height:200px;margin-top:12px}
+
+/* ═══════════ CTA BANNER ═══════════ */
+.cta-band{border-radius:var(--r3);padding:56px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(120deg,#0e1330,#141a3a 60%,#0e2a2c)}
+.cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(84,104,255,.25),transparent 55%),radial-gradient(circle at 80% 80%,rgba(33,230,193,.18),transparent 55%)}
+.cta-band>*{position:relative;z-index:1}
+.cta-band h3{font-family:var(--disp);font-size:28px;font-weight:800;margin-bottom:10px;letter-spacing:-.6px;color:#fff}
+.cta-band p{color:rgba(255,255,255,.6);font-size:14px;margin-bottom:26px}
+
+/* ═══════════ FOOTER ═══════════ */
+.foot{padding:56px 0 30px;border-top:1px solid var(--ln)}
+.foot-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:30px;margin-bottom:36px}
+.foot-h{font-size:11px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.foot-links{display:flex;flex-direction:column;gap:10px}
+.foot-links a{font-size:13px;color:var(--ink3)}
+.foot-links a:hover{color:var(--ink)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:26px;border-top:1px solid var(--ln);font-size:12px;color:var(--ink4);flex-wrap:wrap;gap:10px}
+
+/* ═══════════ AUTH OVERLAY ═══════════ */
+.auth-overlay{position:fixed;inset:0;background:rgba(4,6,14,.72);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.auth-overlay.on{display:flex}
+.auth-card{width:100%;max-width:400px;padding:32px;border-radius:var(--r3);background:var(--bg2);border:1px solid var(--ln2);box-shadow:var(--sh2);position:relative}
+.auth-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:8px;background:var(--surf2);border:none;color:var(--ink3);cursor:pointer;font-size:14px}
+.auth-t{font-family:var(--disp);font-size:22px;font-weight:800;margin-bottom:4px}
+.auth-s{font-size:12.5px;color:var(--ink3);margin-bottom:22px}
+.auth-field{margin-bottom:14px}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:18px 0;color:var(--ink4);font-size:11px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--ln2)}
+.auth-switch{text-align:center;font-size:12.5px;color:var(--ink3);margin-top:16px}
+.auth-switch b{color:var(--indigo);cursor:pointer}
+
+/* ═══════════ APP SHELL ═══════════ */
+.app-shell{display:none;height:100vh;overflow:hidden}
+.app-shell.on{display:flex}
+.sb{width:248px;background:var(--bg2);border-right:1px solid var(--ln);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow:hidden;transition:transform .2s ease}
+.sb-top{padding:18px 18px 14px;border-bottom:1px solid var(--ln)}
+.sb-nav{flex:1;overflow-y:auto;padding:14px 12px}
+.sb-grp{font-size:9.5px;font-weight:700;color:var(--ink4);letter-spacing:1.6px;text-transform:uppercase;padding:14px 10px 6px}
+.sbi{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;cursor:pointer;margin-bottom:2px;transition:.13s;font-size:13px;font-weight:500;color:var(--ink3)}
+.sbi:hover{background:var(--surf2);color:var(--ink)}
+.sbi.on{background:var(--indigol);color:var(--ink)}
+.sbi.on .sbi-ic{color:var(--indigo)}
+.sbi-ic{width:19px;text-align:center;font-size:15px}
+.sb-bottom{padding:14px;border-top:1px solid var(--ln)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:9px;border-radius:10px;cursor:pointer}
+.sb-user:hover{background:var(--surf2)}
+.sb-uav{width:34px;height:34px;border-radius:9px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0}
+.sb-scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:59}
+
+.app-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.app-top{height:62px;border-bottom:1px solid var(--ln);display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0}
+.app-burger{display:none;width:34px;height:34px;border-radius:9px;border:1.5px solid var(--ln2);background:var(--surf2);cursor:pointer}
+.app-title{font-family:var(--disp);font-weight:700;font-size:16.5px}
+.app-content{flex:1;overflow-y:auto;padding:24px 28px 44px}
+.apage{display:none}
+.apage.on{display:block;animation:pgfi .18s ease}
+@keyframes pgfi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ═══════════ APP: KPI CARDS ═══════════ */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi{padding:20px;border-radius:var(--r2)}
+.kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.kpi-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:17px}
+.kpi-n{font-family:var(--disp);font-size:28px;font-weight:800;letter-spacing:-1px}
+.kpi-l{font-size:11.5px;color:var(--ink3);margin-top:3px}
+
+.row2{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:16px}
+.row2b{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ph2{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--ln)}
+.ph2-t{font-family:var(--disp);font-weight:700;font-size:14.5px;flex:1}
+.ph2-s{font-size:11px;color:var(--ink4)}
+.pcb{padding:18px 20px}
+
+/* scan list */
+.scan-row{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--ln);cursor:pointer}
+.scan-row:last-child{border-bottom:none}
+.scan-row:hover{opacity:.85}
+.scan-favicon{width:38px;height:38px;border-radius:10px;background:var(--surf2);display:grid;place-items:center;font-size:16px;flex-shrink:0}
+.scan-url{font-weight:600;font-size:13px}
+.scan-meta{font-size:11px;color:var(--ink4);margin-top:2px}
+.scan-score{font-family:var(--disp);font-weight:800;font-size:18px}
+
+/* ═══════════ SCANNER ═══════════ */
+.scanner-hero{padding:50px 30px;text-align:center;border-radius:var(--r3);position:relative;overflow:hidden}
+.scan-input-row{display:flex;gap:10px;max-width:560px;margin:22px auto 0;background:var(--surf2);border:1.5px solid var(--ln2);border-radius:13px;padding:6px}
+.scan-input-row input{flex:1;background:none;border:none;font-family:var(--mono)}
+.scan-progress-wrap{max-width:640px;margin:0 auto;display:none}
+.scan-progress-wrap.on{display:block}
+.scan-step{display:flex;align-items:center;gap:12px;padding:11px 16px;border-radius:10px;margin-bottom:8px;background:var(--surf);border:1px solid var(--ln);opacity:0;transform:translateY(6px);animation:stepin .3s ease forwards}
+@keyframes stepin{to{opacity:1;transform:none}}
+.step-spin{width:16px;height:16px;border-radius:50%;border:2px solid var(--ln2);border-top-color:var(--indigo);animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.step-check{color:var(--cyan);font-weight:800;flex-shrink:0}
+.scan-step-label{font-size:13px;font-weight:500;color:var(--ink2);flex:1;text-align:left}
+
+/* ═══════════ REPORT ═══════════ */
+.rpt-head{display:flex;align-items:center;gap:20px;padding:24px;border-radius:var(--r2);margin-bottom:16px;flex-wrap:wrap}
+.rpt-dial{position:relative;width:104px;height:104px;flex-shrink:0}
+.rpt-dial svg{transform:rotate(-90deg)}
+.rpt-dial-n{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rpt-dial-n b{font-family:var(--disp);font-size:26px;font-weight:800}
+.rpt-dial-n span{font-size:9px;color:var(--ink4);text-transform:uppercase;letter-spacing:.5px}
+.cat-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.cat-bar-label{width:170px;font-size:12.5px;color:var(--ink2);flex-shrink:0}
+.cat-bar-track{flex:1;height:8px;background:var(--surf3);border-radius:99px;overflow:hidden}
+.cat-bar-fill{height:100%;border-radius:99px;transition:width .6s ease}
+.cat-bar-n{font-family:var(--mono);font-size:11px;font-weight:600;width:32px;text-align:right;flex-shrink:0}
+.chk-group-h{font-family:var(--disp);font-weight:700;font-size:13.5px;padding:14px 20px 8px;color:var(--ink2)}
+.chk-row{display:flex;align-items:flex-start;gap:11px;padding:9px 20px}
+.chk-ic{width:19px;height:19px;border-radius:6px;display:grid;place-items:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:1px}
+.chk-txt{font-size:12.5px;color:var(--ink2);flex:1}
+.ai-summary{padding:20px;border-radius:var(--r2);line-height:1.75;font-size:13px;color:var(--ink2)}
+
+/* ═══════════ TABLE ═══════════ */
+.dtbl{width:100%;border-collapse:collapse}
+.dtbl th{text-align:left;font-size:10.5px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.4px;padding:11px 16px;border-bottom:1px solid var(--ln)}
+.dtbl td{padding:12px 16px;font-size:12.5px;border-bottom:1px solid var(--ln)}
+.dtbl tr:hover td{background:var(--surf)}
+.tbl-wrap{border-radius:var(--r2);overflow:hidden}
+.tbl-scroll{overflow-x:auto}
+
+/* toggles / settings */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--ln)}
+.toggle-row:last-child{border-bottom:none}
+.switch{width:40px;height:23px;border-radius:99px;background:var(--surf3);position:relative;cursor:pointer;flex-shrink:0;transition:.16s;border:1px solid var(--ln2)}
+.switch.on{background:var(--indigo);border-color:var(--indigo)}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:#fff;transition:.16s}
+.switch.on::after{left:19px}
+.theme-swatch{width:34px;height:34px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+.theme-swatch.on{border-color:var(--ink)}
+
+@media (max-width:1024px){
+  .hero-in{grid-template-columns:1fr}
+  .feat-grid,.price-grid,.steps-row{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .pubnav-links{display:none}
+  .nav-burger{display:block}
+  .row2{grid-template-columns:1fr}
+  .sb{position:fixed;left:0;top:0;z-index:60;transform:translateX(-100%)}
+  .sb.open{transform:translateX(0)}
+  .sb-scrim.on{display:block}
+  .app-burger{display:block}
+}
+@media (max-width:700px){
+  .wrap{padding:0 18px}
+  .hero-h1{font-size:32px}
+  .feat-grid,.price-grid,.steps-row{grid-template-columns:1fr}
+  .step:not(:first-child)::before{display:none}
+  .kpi-row{grid-template-columns:1fr 1fr}
+  .row2b{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr}
+  .app-content{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ PUBLIC SITE ══════════════ -->
+<div id="publicSite">
+  <nav class="pubnav">
+    <div class="pubnav-in">
+      <div class="logo"><div class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5.5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11v-6L12 2z" stroke="#fff" stroke-width="1.6"/><path d="M9 12l2 2 4-4.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Vidhaan</div>
+      <div class="pubnav-links">
+        <a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+      </div>
+      <div class="pubnav-r">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <button class="btn btn-outline btn-sm" onclick="openAuth('login')">Log in</button>
+        <button class="btn btn-grad btn-sm" onclick="openAuth('register')">Start free scan</button>
+        <button class="nav-burger" onclick="toast('Menu — use the links above on desktop')">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow1"></div><div class="hero-glow2"></div><div class="hero-grid"></div>
+    <div class="wrap hero-in">
+      <div>
+        <div class="eyebrow">DPDP Act, 2023 · Automated Audit</div>
+        <h1 class="hero-h1">Know if your website<br>breaks <span class="grad-text">India's privacy law</span> — before your users do.</h1>
+        <p class="hero-sub">Vidhaan scans any public website against the Digital Personal Data Protection Act, 2023 — privacy policy, consent flows, security headers, user rights — and returns a scored, actionable compliance report in under a minute.</p>
+        <div class="hero-scan-row">
+          <input id="heroUrlInput" placeholder="https://yourcompany.in" value="https://example.in">
+          <button class="btn btn-grad" onclick="startHeroScan()">Scan now →</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat"><b>38</b><span>Checks per scan</span></div>
+          <div class="hstat"><b>8</b><span>Compliance categories</span></div>
+          <div class="hstat"><b>&lt;60s</b><span>Avg. scan time</span></div>
+        </div>
+      </div>
+      <div class="term glass">
+        <div class="term-bar"><div class="term-dot" style="background:#ff5f57"></div><div class="term-dot" style="background:#febc2e"></div><div class="term-dot" style="background:#28c840"></div><div class="term-title">vidhaan-scanner — live</div></div>
+        <div class="term-body" id="heroTerm"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip"><div class="wrap strip-in">
+    <span>TRUSTED BY COMPLIANCE TEAMS AT</span><span>NimbusPay</span><span>Kosha Health</span><span>Rupeeka</span><span>Trellis Logistics</span><span>Aster Retail</span>
+  </div></div>
+
+  <!-- FEATURES -->
+  <section class="sec" id="features"><div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">What we check</div>
+      <h2 class="sec-h2">Every clause of the DPDP Act, turned into a checklist</h2>
+      <p class="sec-p">We don't guess — we crawl your live site, read the actual privacy policy, and test the actual consent flow against 38 individual requirements grouped into 8 categories.</p>
+    </div>
+    <div class="feat-grid" id="featGrid"></div>
+  </div></section>
+
+  <!-- HOW IT WORKS -->
+  <section class="sec" id="how" style="padding-top:0"><div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The process</div>
+      <h2 class="sec-h2">From URL to audit report in three steps</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step"><div class="step-n">01 — Submit</div><div class="step-t">Paste your website URL</div><div class="step-d">No installation, no code changes. We only need the public URL of the site you want audited.</div></div>
+      <div class="step"><div class="step-n">02 — Scan</div><div class="step-t">We crawl & analyze</div><div class="step-d">Our engine crawls your privacy policy, forms, cookies and security headers, then runs it through DPDP-specific AI analysis.</div></div>
+      <div class="step"><div class="step-n">03 — Report</div><div class="step-t">Get a scored report</div><div class="step-d">A 0–100 compliance score, category breakdown, and a prioritized fix list — exportable as PDF or CSV.</div></div>
+    </div>
+  </div></section>
+
+  <!-- PRICING -->
+  <section class="sec" id="pricing"><div class="wrap">
+    <div class="sec-head" style="margin:0 auto 48px;text-align:center;max-width:560px">
+      <div class="eyebrow" style="justify-content:center">Pricing</div>
+      <h2 class="sec-h2">Simple plans for teams of any size</h2>
+    </div>
+    <div class="price-grid" id="priceGrid"></div>
+  </div></section>
+
+  <!-- FAQ -->
+  <section class="sec" id="faq"><div class="wrap" style="max-width:760px">
+    <div class="sec-head"><div class="eyebrow">FAQ</div><h2 class="sec-h2">Common questions</h2></div>
+    <div id="faqList"></div>
+  </div></section>
+
+  <!-- CTA -->
+  <section class="sec" id="contact"><div class="wrap">
+    <div class="cta-band">
+      <h3>Run your first compliance scan for free</h3>
+      <p>No credit card. No install. Just paste your URL and see where you stand in under a minute.</p>
+      <button class="btn btn-grad" onclick="openAuth('register')">Start free scan →</button>
+    </div>
+  </div></section>
+
+  <footer class="foot"><div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo" style="margin-bottom:12px"><div class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5.5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11v-6L12 2z" stroke="#fff" stroke-width="1.6"/></svg></div>Vidhaan</div><p style="font-size:12.5px;color:var(--ink4);max-width:220px;line-height:1.7">Automated DPDP Act, 2023 compliance audits for Indian websites.</p></div>
+      <div><div class="foot-h">Product</div><div class="foot-links"><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div></div>
+      <div><div class="foot-h">Company</div><div class="foot-links"><a href="#">About</a><a href="#">Blog</a><a href="#contact">Contact</a></div></div>
+      <div><div class="foot-h">Legal</div><div class="foot-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Grievance Officer</a></div></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Vidhaan Technologies. Not affiliated with the Government of India.</span><span>Made for DPDP Act, 2023</span></div>
+  </div></footer>
+</div>
+
+<!-- ══════════════ AUTH OVERLAY ══════════════ -->
+<div class="auth-overlay" id="authOverlay" onclick="if(event.target===this)closeAuth()">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <div id="authBody"></div>
+  </div>
+</div>
+
+<!-- ══════════════ APP SHELL ══════════════ -->
+<div class="sb-scrim" id="sbScrim" onclick="closeSidebar()"></div>
+<div class="app-shell" id="appShell">
+  <aside class="sb" id="sidebar">
+    <div class="sb-top"><div class="logo"><div class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5.5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11v-6L12 2z" stroke="#fff" stroke-width="1.6"/><path d="M9 12l2 2 4-4.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Vidhaan</div></div>
+    <nav class="sb-nav" id="sbNav">
+      <div class="sb-grp">Workspace</div>
+      <div class="sbi on" data-p="dashboard"><span class="sbi-ic">▦</span>Dashboard</div>
+      <div class="sbi" data-p="scanner"><span class="sbi-ic">◎</span>Scanner</div>
+      <div class="sbi" data-p="history"><span class="sbi-ic">☰</span>Scan History</div>
+      <div class="sbi" data-p="reports"><span class="sbi-ic">▤</span>Reports</div>
+      <div class="sb-grp">Account</div>
+      <div class="sbi" data-p="settings"><span class="sbi-ic">⚙</span>Settings</div>
+      <div class="sbi" data-p="profile"><span class="sbi-ic">◍</span>Profile</div>
+      <div class="sb-grp">System</div>
+      <div class="sbi" data-p="admin"><span class="sbi-ic">◈</span>Admin Panel</div>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user" onclick="switchApp('profile')">
+        <div class="sb-uav" id="sbUav">SA</div>
+        <div style="min-width:0;flex:1"><div style="font-size:12.5px;font-weight:700" id="sbUname">Sarah Anand</div><div style="font-size:10.5px;color:var(--ink4)">Compliance Lead</div></div>
+      </div>
+      <button class="btn btn-outline btn-sm btn-block" style="margin-top:10px" onclick="logout()">Log out</button>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <div class="app-top">
+      <button class="app-burger" onclick="openSidebar()">☰</button>
+      <div class="app-title" id="appPageTitle">Dashboard</div>
+      <div style="flex:1"></div>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      <button class="btn btn-grad btn-sm" onclick="switchApp('scanner')">+ New Scan</button>
+    </div>
+    <div class="app-content" id="appContent">
+
+      <!-- DASHBOARD -->
+      <section class="apage on" id="ap-dashboard">
+        <div class="kpi-row" id="dashKpis"></div>
+        <div class="row2">
+          <div class="card">
+            <div class="ph2"><span class="ph2-t">Recent Scans</span><span class="ph2-s" id="dashScanCount"></span></div>
+            <div class="pcb" id="dashRecent"></div>
+          </div>
+          <div class="card">
+            <div class="ph2"><span class="ph2-t">Risk Distribution</span></div>
+            <div class="pcb" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div class="rpt-dial" style="width:96px;height:96px"><svg viewBox="0 0 96 96" width="96" height="96" id="riskDonut"></svg></div>
+              <div id="riskLeg" style="flex:1;min-width:140px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row2b">
+          <div class="card">
+            <div class="ph2"><span class="ph2-t">Compliance Score Trend</span><span class="ph2-s">Last 6 scans</span></div>
+            <div class="pcb"><svg id="trendSpark" viewBox="0 0 380 80" preserveAspectRatio="none" style="width:100%;height:80px"></svg></div>
+          </div>
+          <div class="card">
+            <div class="ph2"><span class="ph2-t">Quick Actions</span></div>
+            <div class="pcb" style="display:flex;flex-direction:column;gap:8px">
+              <button class="btn btn-ghost btn-block" style="justify-content:flex-start" onclick="switchApp('scanner')">◎ Run a new scan</button>
+              <button class="btn btn-ghost btn-block" style="justify-content:flex-start" onclick="switchApp('history')">☰ View scan history</button>
+              <button class="btn btn-ghost btn-block" style="justify-content:flex-start" onclick="switchApp('settings')">⚙ Configure alerts</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCANNER -->
+      <section class="apage" id="ap-scanner">
+        <div class="scanner-hero card">
+          <div class="eyebrow" style="justify-content:center">New Scan</div>
+          <h2 style="font-family:var(--disp);font-size:24px;font-weight:800;margin-bottom:6px">Enter a website to audit</h2>
+          <p style="color:var(--ink3);font-size:13px">We'll check it against all 38 DPDP Act requirements</p>
+          <div class="scan-input-row"><input id="scannerUrlInput" placeholder="https://yourcompany.in"><button class="btn btn-grad" onclick="runScan()">Start Scan</button></div>
+          <div class="scan-progress-wrap" id="scanProgressWrap"><div id="scanSteps" style="margin-top:26px;text-align:left"></div></div>
+        </div>
+      </section>
+
+      <!-- REPORT (opened after a scan or from history) -->
+      <section class="apage" id="ap-report">
+        <div id="reportBody"></div>
+      </section>
+
+      <!-- HISTORY -->
+      <section class="apage" id="ap-history">
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+          <div class="card" style="flex:1;min-width:220px;display:flex;align-items:center;gap:8px;padding:10px 14px"><span>🔍</span><input id="histSearch" placeholder="Search by URL..." style="border:none;background:none;flex:1" oninput="renderHistory()"></div>
+          <button class="btn btn-outline" id="compareBtn" onclick="compareSelected()" disabled>⇄ Compare (0)</button>
+        </div>
+        <div class="tbl-wrap card tbl-scroll"><table class="dtbl"><thead><tr><th></th><th>Website</th><th>Score</th><th>Risk</th><th>Scanned</th><th></th></tr></thead><tbody id="histTbody"></tbody></table></div>
+      </section>
+
+      <!-- REPORTS (list view, links into ap-report) -->
+      <section class="apage" id="ap-reports">
+        <div class="row2b" id="reportsGrid"></div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="apage" id="ap-settings">
+        <div class="card" style="padding:22px;margin-bottom:16px">
+          <div style="font-family:var(--disp);font-weight:700;margin-bottom:14px">Notifications</div>
+          <div class="toggle-row"><div><b style="font-size:12.5px">Critical risk alerts</b><div style="font-size:11px;color:var(--ink4)">Email me when a scan scores below 30</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div><b style="font-size:12.5px">Weekly summary</b><div style="font-size:11px;color:var(--ink4)">A digest of all scans every Monday</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div><b style="font-size:12.5px">Scan completion emails</b><div style="font-size:11px;color:var(--ink4)">Notify when a scan finishes</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="card" style="padding:22px;margin-bottom:16px">
+          <div style="font-family:var(--disp);font-weight:700;margin-bottom:14px">Accent Color</div>
+          <div style="display:flex;gap:12px" id="accentSwatches"></div>
+        </div>
+        <div class="card" style="padding:22px;margin-bottom:16px">
+          <div style="font-family:var(--disp);font-weight:700;margin-bottom:6px">AI Analysis API Key</div>
+          <p style="font-size:11.5px;color:var(--ink4);margin-bottom:12px">Bring your own OpenAI key if you self-host the Vidhaan backend. Used only server-side, never stored in the browser.</p>
+          <div style="display:flex;gap:10px"><input id="apiKeyInput" placeholder="sk-••••••••••••••••" style="flex:1" type="password"><button class="btn btn-ghost" onclick="toast('🔒 Key saved for this session')">Save</button></div>
+        </div>
+        <div class="card" style="padding:22px">
+          <div style="font-family:var(--disp);font-weight:700;margin-bottom:6px">Data</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" onclick="exportAllScans()">⬇ Export all scans (JSON)</button><button class="btn btn-outline" style="color:var(--coral);border-color:var(--corall)" onclick="clearHistory()">🗑 Clear scan history</button></div>
+        </div>
+      </section>
+
+      <!-- PROFILE -->
+      <section class="apage" id="ap-profile">
+        <div class="card" style="padding:24px;max-width:520px">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px"><div class="sb-uav" style="width:56px;height:56px;font-size:20px">SA</div><div><div style="font-family:var(--disp);font-weight:700;font-size:17px">Sarah Anand</div><div style="font-size:12px;color:var(--ink4)">Compliance Lead · NimbusPay</div></div></div>
+          <div class="auth-field"><label>Full Name</label><input id="profName" value="Sarah Anand"></div>
+          <div class="auth-field"><label>Email</label><input id="profEmail" value="sarah@nimbuspay.in"></div>
+          <div class="auth-field"><label>Organization</label><input id="profOrg" value="NimbusPay"></div>
+          <button class="btn btn-grad" onclick="saveProfile()">Save Changes</button>
+        </div>
+      </section>
+
+      <!-- ADMIN -->
+      <section class="apage" id="ap-admin">
+        <div class="kpi-row" id="adminKpis"></div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="ph2"><span class="ph2-t">Users</span></div>
+          <div class="tbl-wrap tbl-scroll"><table class="dtbl"><thead><tr><th>User</th><th>Org</th><th>Plan</th><th>Scans</th><th>Status</th></tr></thead><tbody id="adminUsersTbody"></tbody></table></div>
+        </div>
+        <div class="card">
+          <div class="ph2"><span class="ph2-t">System Logs</span></div>
+          <div class="pcb" id="adminLogs" style="font-family:var(--mono);font-size:11.5px;color:var(--ink3);display:flex;flex-direction:column;gap:7px"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast-el" id="toastEl"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   DETERMINISTIC "SCAN ENGINE" — seeded PRNG so the same
+   URL always produces the same, believable results
+   ══════════════════════════════════════════════════════ */
+function hashStr(s){var h=0;for(var i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0;}return Math.abs(h);}
+function mulberry32(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+
+var CATEGORIES=[
+  {key:'privacy',name:'Privacy Policy',icon:'📄',checks:[
+    {t:'Privacy Policy exists on the website',p:.88},
+    {t:'Privacy Policy is accessible from the homepage',p:.8},
+    {t:'Purpose of data collection is clearly stated',p:.62},
+    {t:'Data processing activities are explained',p:.55},
+    {t:'Data retention period is disclosed',p:.4},
+  ]},
+  {key:'consent',name:'Consent Mechanism',icon:'✅',checks:[
+    {t:'Consent is obtained before data collection',p:.58},
+    {t:'Cookie consent banner is present',p:.72},
+    {t:'Cookie preference settings are available',p:.5},
+    {t:'Consent withdrawal option is provided',p:.35},
+    {t:'Consent checkboxes are not pre-ticked',p:.6},
+  ]},
+  {key:'rights',name:'User Rights',icon:'⚖️',checks:[
+    {t:'Right to Access is mentioned',p:.5},
+    {t:'Right to Correction is mentioned',p:.45},
+    {t:'Right to Erasure ("right to be forgotten") is mentioned',p:.38},
+    {t:'Right to Nominate is mentioned',p:.18},
+    {t:'A grievance redressal process is described',p:.42},
+  ]},
+  {key:'grievance',name:'Contact & Grievance Officer',icon:'📮',checks:[
+    {t:'A named Grievance Officer is published',p:.3},
+    {t:'Grievance Officer email is available',p:.35},
+    {t:'General privacy contact is available',p:.68},
+    {t:'A response-time commitment is stated',p:.22},
+  ]},
+  {key:'children',name:"Children's Data",icon:'🧒',checks:[
+    {t:'Age verification mechanism exists',p:.25},
+    {t:'Parental consent is required for minors',p:.2},
+    {t:"Children's data handling policy is published",p:.22},
+  ]},
+  {key:'security',name:'Security Practices',icon:'🔐',checks:[
+    {t:'HTTPS is enforced site-wide',p:.9},
+    {t:'Valid SSL certificate is installed',p:.92},
+    {t:'HSTS header is present',p:.45},
+    {t:'Content-Security-Policy header is present',p:.4},
+    {t:'X-Frame-Options header is present',p:.5},
+    {t:'Cookies use Secure, HttpOnly & SameSite flags',p:.42},
+  ]},
+  {key:'datahandling',name:'Data Handling & Transfers',icon:'🌐',checks:[
+    {t:'Cross-border data transfer is disclosed',p:.3},
+    {t:'Third-party data sharing is disclosed',p:.48},
+    {t:'A data breach notification policy exists',p:.28},
+    {t:'Users can request account/data deletion',p:.44},
+  ]},
+  {key:'legal',name:'Legal Pages',icon:'📜',checks:[
+    {t:'Terms & Conditions page exists',p:.85},
+    {t:'Refund / Cancellation policy exists (if applicable)',p:.6},
+  ]},
+];
+var TOTAL_CHECKS=CATEGORIES.reduce(function(a,c){return a+c.checks.length;},0);
+
+function normalizeUrl(u){
+  u=(u||'').trim();
+  if(!u)return'https://example.in';
+  if(!/^https?:\/\//i.test(u))u='https://'+u;
+  return u;
+}
+function domainOf(u){try{return new URL(u).hostname.replace(/^www\./,'');}catch(e){return u;}}
+
+function generateScan(url){
+  url=normalizeUrl(url);
+  var seed=hashStr(domainOf(url).toLowerCase());
+  var rnd=mulberry32(seed);
+  var results=CATEGORIES.map(function(cat){
+    var checks=cat.checks.map(function(c){
+      return {t:c.t,pass:rnd()<c.p};
+    });
+    var passed=checks.filter(function(c){return c.pass;}).length;
+    return {key:cat.key,name:cat.name,icon:cat.icon,checks:checks,passed:passed,total:checks.length,pct:Math.round(passed/checks.length*100)};
+  });
+  var totalPassed=results.reduce(function(a,c){return a+c.passed;},0);
+  var score=Math.round(totalPassed/TOTAL_CHECKS*100);
+  var risk=score>=90?'Excellent':score>=70?'Mostly Compliant':score>=50?'Needs Improvement':score>=30?'High Risk':'Critical';
+  var riskColor=score>=90?'var(--cyan)':score>=70?'#5468ff':score>=50?'var(--amber)':score>=30?'#ff8a3d':'var(--coral)';
+  var failedChecks=[];
+  results.forEach(function(cat){cat.checks.forEach(function(c){if(!c.pass)failedChecks.push({cat:cat.name,t:c.t});});});
+  return {
+    id:uid(),url:url,domain:domainOf(url),score:score,risk:risk,riskColor:riskColor,
+    categories:results,failedChecks:failedChecks,scannedAt:new Date().toISOString(),
+    summary:buildSummary(domainOf(url),score,risk,failedChecks)
+  };
+}
+function buildSummary(domain,score,risk,failed){
+  var intro=score>=90?domain+' demonstrates strong alignment with the DPDP Act, 2023, with only minor gaps remaining.':
+    score>=70?domain+' is largely compliant with the DPDP Act, 2023, but a handful of requirements still need attention before an audit would consider it low-risk.':
+    score>=50?domain+' meets some baseline requirements of the DPDP Act, 2023, but has significant gaps — particularly around consent and user rights — that should be prioritized.':
+    score>=30?domain+' falls short of core DPDP Act, 2023 obligations. Consent flows, grievance handling and security headers all need immediate remediation.':
+    domain+' shows critical non-compliance with the DPDP Act, 2023. Data collection appears to happen with little to no disclosed consent framework, which carries material regulatory risk.';
+  var top=failed.slice(0,4).map(function(f){return '• '+f.t+' ('+f.cat+')';}).join('\n');
+  return intro+(failed.length?'\n\nKey gaps identified:\n'+top+(failed.length>4?'\n• +'+(failed.length-4)+' more items — see full checklist below.':''):'\n\nNo material gaps were identified in this scan.');
+}
+
+/* ══════════════════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════════════════ */
+function uid(){return Date.now()+Math.floor(Math.random()*10000);}
+var SCANS=[];
+['https://nimbuspay.in','https://koshahealth.in','https://rupeeka.com','https://trellislogistics.in','https://asterretail.in','https://quickcart.in'].forEach(function(u,i){
+  var s=generateScan(u);
+  s.scannedAt=new Date(Date.now()-(i+1)*86400000*1.6).toISOString();
+  SCANS.push(s);
+});
+var currentReportId=null;
+var isLoggedIn=false;
+var histSelected=new Set();
+
+/* ══════════════════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════════════════ */
+var _tt;
+function toast(msg){var el=document.getElementById('toastEl');el.textContent=msg;el.style.display='block';clearTimeout(_tt);_tt=setTimeout(function(){el.style.display='none';},2800);}
+
+/* ══════════════════════════════════════════════════════
+   THEME
+   ══════════════════════════════════════════════════════ */
+function toggleTheme(){
+  document.body.classList.toggle('light');
+  document.getElementById('themeBtn')&&(document.getElementById('themeBtn').textContent=document.body.classList.contains('light')?'☀️':'🌙');
+}
+var ACCENTS=[['#5468ff','#9b5de5'],['#21e6c1','#0fc9a6'],['#ff5470','#e23a56'],['#ffb020','#e0940c'],['#9b5de5','#7f3fd1']];
+function applyAccent(i){
+  var a=ACCENTS[i];
+  document.documentElement.style.setProperty('--indigo',a[0]);
+  document.documentElement.style.setProperty('--indigo2',a[1]);
+  renderAccentSwatches(i);
+  toast('🎨 Accent color updated');
+}
+function renderAccentSwatches(active){
+  document.getElementById('accentSwatches').innerHTML=ACCENTS.map(function(a,i){
+    return '<div class="theme-swatch'+(active===i?' on':'')+'" style="background:'+a[0]+'" onclick="applyAccent('+i+')"></div>';
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════════════
+   PUBLIC SITE CONTENT
+   ══════════════════════════════════════════════════════ */
+var FEATURES=[
+  {ic:'📄',bg:'var(--indigol)',t:'Privacy Policy Audit',d:'We read your actual privacy policy and check it for the disclosures DPDP requires — purpose, retention, processing.'},
+  {ic:'✅',bg:'var(--cyanl)',t:'Consent Flow Testing',d:'We detect cookie banners, pre-ticked boxes, and whether consent is captured before data collection begins.'},
+  {ic:'⚖️',bg:'var(--violetl)',t:'User Rights Check',d:'Access, correction, erasure and nomination — we verify each right is documented and reachable.'},
+  {ic:'🔐',bg:'var(--indigol)',t:'Security Headers Scan',d:'HTTPS, HSTS, CSP, X-Frame-Options and cookie flags, checked against current best practice.'},
+  {ic:'🧒',bg:'var(--corall)',t:"Children's Data Rules",d:'Age verification and parental consent requirements, flagged wherever a site targets minors.'},
+  {ic:'🤖',bg:'var(--cyanl)',t:'AI Legal Summary',d:'A plain-English summary of your compliance posture, with the highest-priority gaps ranked first.'},
+];
+function renderFeatures(){
+  document.getElementById('featGrid').innerHTML=FEATURES.map(function(f){
+    return '<div class="feat-card card"><div class="feat-ic" style="background:'+f.bg+'">'+f.ic+'</div><div class="feat-t">'+f.t+'</div><div class="feat-d">'+f.d+'</div></div>';
+  }).join('');
+}
+var PRICING=[
+  {t:'Starter',price:'₹0',per:'/mo',feat:false,list:['3 scans per month','Core compliance checklist','Email support','PDF export']},
+  {t:'Growth',price:'₹2,499',per:'/mo',feat:true,list:['Unlimited scans','Full 38-point checklist','AI legal summaries','Scheduled scans','PDF + Excel export','Priority support']},
+  {t:'Enterprise',price:'Custom',per:'',feat:false,list:['Everything in Growth','Multi-site batch scans','API access','Dedicated compliance advisor','Custom SLA']},
+];
+function renderPricing(){
+  document.getElementById('priceGrid').innerHTML=PRICING.map(function(p){
+    return '<div class="price-card card'+(p.feat?' feat':'')+'">'+(p.feat?'<div class="price-badge">Most Popular</div>':'')+
+      '<div class="price-t">'+p.t+'</div><div class="price-n">'+p.price+' <span>'+p.per+'</span></div>'+
+      '<ul class="price-list">'+p.list.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul>'+
+      '<button class="btn '+(p.feat?'btn-grad':'btn-outline')+' btn-block" onclick="openAuth(\'register\')">Get started</button></div>';
+  }).join('');
+}
+var FAQS=[
+  {q:'Does Vidhaan store my privacy policy or website content?',a:'We only store scan results (pass/fail per check and your score history) — not the raw HTML or policy text of scanned sites.'},
+  {q:'Is this legal advice?',a:'No. Vidhaan is an automated technical and textual audit tool. It flags likely gaps against the DPDP Act, 2023, but you should confirm remediation with legal counsel.'},
+  {q:'Can I scan a website I don\'t own?',a:'Yes — Vidhaan only reads publicly accessible pages, the same way a browser or search engine would.'},
+  {q:'How often should I re-scan?',a:'We recommend scanning after any change to your privacy policy, checkout flow, or cookie setup, and at minimum once a quarter.'},
+];
+function renderFAQ(){
+  document.getElementById('faqList').innerHTML=FAQS.map(function(f,i){
+    return '<div class="faq-item" id="faq'+i+'" onclick="toggleFaq('+i+')"><div class="faq-q">'+f.q+'<span class="faq-ic">+</span></div><div class="faq-a">'+f.a+'</div></div>';
+  }).join('');
+}
+function toggleFaq(i){document.getElementById('faq'+i).classList.toggle('open');}
+renderFeatures();renderPricing();renderFAQ();
+
+/* Hero live terminal simulation */
+var HERO_STEPS=[
+  ['pass','Fetched robots.txt & sitemap'],
+  ['pass','Located Privacy Policy at /privacy'],
+  ['fail','Consent withdrawal option not found'],
+  ['pass','HTTPS enforced, valid SSL certificate'],
+  ['fail','Grievance Officer email not published'],
+  ['pass','Cookie consent banner detected'],
+];
+function playHeroTerm(){
+  var el=document.getElementById('heroTerm'); if(!el)return;
+  el.innerHTML='';
+  HERO_STEPS.forEach(function(s,i){
+    setTimeout(function(){
+      var d=document.createElement('div');
+      d.className='term-line '+s[0];
+      d.style.animationDelay='0s';
+      d.innerHTML='<span class="term-ic">'+(s[0]==='pass'?'✓':'✕')+'</span><span>'+s[1]+'</span>';
+      el.appendChild(d);
+      if(i===HERO_STEPS.length-1){
+        var sc=document.createElement('div');
+        sc.className='term-score';
+        sc.innerHTML='<span style="color:var(--ink3)">Compliance Score</span><b>'+(Math.round((HERO_STEPS.filter(function(x){return x[0]==='pass'}).length/HERO_STEPS.length)*100))+'/100</b>';
+        sc.style.opacity=0;sc.style.animation='tfi .4s ease forwards';
+        el.appendChild(sc);
+      }
+    },i*480);
+  });
+}
+setTimeout(playHeroTerm,500);
+function startHeroScan(){
+  var url=document.getElementById('heroUrlInput').value;
+  openAuth('register');
+  toast('Create a free account to see the full report for '+domainOf(normalizeUrl(url)));
+}
+
+/* ══════════════════════════════════════════════════════
+   AUTH
+   ══════════════════════════════════════════════════════ */
+var AUTH_VIEWS={
+  login:{t:'Welcome back',s:'Log in to your Vidhaan workspace',
+    body:'<div class="auth-field"><label>Email</label><input id="aEmail" placeholder="you@company.in" value="sarah@nimbuspay.in"></div>'+
+    '<div class="auth-field"><label>Password</label><input type="password" id="aPass" placeholder="••••••••" value="demo1234"></div>'+
+    '<button class="btn btn-grad btn-block" onclick="doLogin()">Log in</button>'+
+    '<div class="auth-divider">or</div>'+
+    '<button class="btn btn-outline btn-block" onclick="doLogin()">🔵 Continue with Google</button>'+
+    '<div class="auth-switch">No account? <b onclick="openAuth(\'register\')">Sign up free</b><br><b onclick="openAuth(\'forgot\')" style="display:inline-block;margin-top:8px">Forgot password?</b></div>'},
+  register:{t:'Create your account',s:'Start auditing your website in minutes',
+    body:'<div class="auth-field"><label>Full Name</label><input id="rName" placeholder="Sarah Anand"></div>'+
+    '<div class="auth-field"><label>Work Email</label><input id="rEmail" placeholder="you@company.in"></div>'+
+    '<div class="auth-field"><label>Password</label><input type="password" id="rPass" placeholder="Create a password"></div>'+
+    '<button class="btn btn-grad btn-block" onclick="doLogin()">Create free account</button>'+
+    '<div class="auth-divider">or</div>'+
+    '<button class="btn btn-outline btn-block" onclick="doLogin()">🔵 Continue with Google</button>'+
+    '<div class="auth-switch">Already have an account? <b onclick="openAuth(\'login\')">Log in</b></div>'},
+  forgot:{t:'Reset your password',s:"We'll email you a reset link",
+    body:'<div class="auth-field"><label>Email</label><input id="fEmail" placeholder="you@company.in"></div>'+
+    '<button class="btn btn-grad btn-block" onclick="doForgot()">Send reset link</button>'+
+    '<div class="auth-switch"><b onclick="openAuth(\'login\')">← Back to log in</b></div>'},
+};
+function openAuth(view){
+  var v=AUTH_VIEWS[view];
+  document.getElementById('authBody').innerHTML='<div class="auth-t">'+v.t+'</div><div class="auth-s">'+v.s+'</div>'+v.body;
+  document.getElementById('authOverlay').classList.add('on');
+}
+function closeAuth(){document.getElementById('authOverlay').classList.remove('on');}
+function doLogin(){
+  closeAuth();
+  isLoggedIn=true;
+  document.getElementById('publicSite').style.display='none';
+  document.getElementById('appShell').classList.add('on');
+  switchApp('dashboard');
+  toast('✅ Welcome back, Sarah!');
+}
+function doForgot(){toast('📧 Reset link sent (demo only)');openAuth('login');}
+function logout(){
+  document.getElementById('appShell').classList.remove('on');
+  document.getElementById('publicSite').style.display='block';
+  isLoggedIn=false;
+  window.scrollTo(0,0);
+  toast('Logged out');
+}
+
+/* ══════════════════════════════════════════════════════
+   APP NAVIGATION
+   ══════════════════════════════════════════════════════ */
+var APP_TITLES={dashboard:'Dashboard',scanner:'Scanner',report:'Compliance Report',history:'Scan History',reports:'Reports',settings:'Settings',profile:'Profile',admin:'Admin Panel'};
+var curApp='dashboard';
+function switchApp(p){
+  curApp=p;
+  document.querySelectorAll('.apage').forEach(function(el){el.classList.remove('on');});
+  var el=document.getElementById('ap-'+p); if(el)el.classList.add('on');
+  document.querySelectorAll('.sbi[data-p]').forEach(function(el){el.classList.toggle('on',el.dataset.p===p);});
+  document.getElementById('appPageTitle').textContent=APP_TITLES[p]||'Dashboard';
+  closeSidebar();
+  renderApp(p);
+  document.getElementById('appContent').scrollTop=0;
+}
+document.querySelectorAll('.sbi[data-p]').forEach(function(el){el.addEventListener('click',function(){switchApp(el.dataset.p);});});
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sbScrim').classList.add('on');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbScrim').classList.remove('on');}
+function renderApp(p){
+  if(p==='dashboard')renderDashboard();
+  else if(p==='history')renderHistory();
+  else if(p==='reports')renderReportsGrid();
+  else if(p==='admin')renderAdmin();
+  else if(p==='settings')renderAccentSwatches(0);
+  else if(p==='report')renderReport();
+}
+
+/* ══════════════════════════════════════════════════════
+   DASHBOARD
+   ══════════════════════════════════════════════════════ */
+function drawSpark(id,data,color){
+  var W=380,H=80,pad=8;
+  var mn=Math.min.apply(null,data),mx=Math.max.apply(null,data);
+  var pts=data.map(function(v,i){return{x:(pad+i/(data.length-1)*(W-2*pad)).toFixed(1),y:(H-pad-((v-mn)/((mx-mn)||1))*(H-2*pad)).toFixed(1)};});
+  var poly=pts.map(function(p){return p.x+','+p.y;}).join(' ');
+  var gid='g'+Math.random().toString(36).slice(2);
+  var s='<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+color+'" stop-opacity=".25"/><stop offset="100%" stop-color="'+color+'" stop-opacity="0"/></linearGradient></defs>';
+  s+='<polygon points="'+pts[0].x+','+H+' '+poly+' '+pts[pts.length-1].x+','+H+'" fill="url(#'+gid+')"/>';
+  s+='<polyline points="'+poly+'" fill="none" stroke="'+color+'" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>';
+  pts.forEach(function(p,i){s+='<circle cx="'+p.x+'" cy="'+p.y+'" r="'+(i===pts.length-1?5:3)+'" fill="'+(i===pts.length-1?color:'var(--bg2)')+'" stroke="'+color+'" stroke-width="2"/>';});
+  var e=document.getElementById(id); if(e)e.innerHTML=s;
+}
+function riskColorOf(risk){return risk==='Excellent'?'#21e6c1':risk==='Mostly Compliant'?'#5468ff':risk==='Needs Improvement'?'#ffb020':risk==='High Risk'?'#ff8a3d':'#ff5470';}
+function renderDashboard(){
+  var avgScore=Math.round(SCANS.reduce(function(a,s){return a+s.score;},0)/(SCANS.length||1));
+  var critical=SCANS.filter(function(s){return s.score<30;}).length;
+  var kpis=[
+    {l:'Average Compliance Score',n:avgScore,co:'var(--indigo)',ic:'▤'},
+    {l:'Total Scans',n:SCANS.length,co:'var(--cyan)',ic:'◎'},
+    {l:'Websites Monitored',n:new Set(SCANS.map(function(s){return s.domain;})).size,co:'var(--violet)',ic:'🌐'},
+    {l:'Critical Risk Alerts',n:critical,co:'var(--coral)',ic:'⚠'},
+  ];
+  document.getElementById('dashKpis').innerHTML=kpis.map(function(k){
+    return '<div class="kpi card"><div class="kpi-top"><div class="kpi-ic" style="background:'+k.co+'22;color:'+k.co+'">'+k.ic+'</div></div><div class="kpi-n">'+k.n+'</div><div class="kpi-l">'+k.l+'</div></div>';
+  }).join('');
+  document.getElementById('dashScanCount').textContent=SCANS.length+' total';
+  var recent=SCANS.slice().sort(function(a,b){return new Date(b.scannedAt)-new Date(a.scannedAt);}).slice(0,5);
+  document.getElementById('dashRecent').innerHTML=recent.length?recent.map(function(s){
+    return '<div class="scan-row" onclick="openReport(\''+s.id+'\')"><div class="scan-favicon">🌐</div><div style="flex:1;min-width:0"><div class="scan-url">'+s.domain+'</div><div class="scan-meta">'+timeAgo(s.scannedAt)+' · '+s.risk+'</div></div><div class="scan-score" style="color:'+riskColorOf(s.risk)+'">'+s.score+'</div></div>';
+  }).join(''):'<div style="text-align:center;color:var(--ink4);padding:30px 0">No scans yet — run your first scan</div>';
+  var buckets={Excellent:0,'Mostly Compliant':0,'Needs Improvement':0,'High Risk':0,Critical:0};
+  SCANS.forEach(function(s){buckets[s.risk]++;});
+  var segs=Object.keys(buckets).map(function(k){return {v:buckets[k],c:riskColorOf(k),l:k};}).filter(function(s){return s.v>0;});
+  drawRiskDonut(segs);
+  document.getElementById('riskLeg').innerHTML=segs.map(function(s){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px"><div style="width:9px;height:9px;border-radius:3px;background:'+s.c+'"></div><span style="flex:1;color:var(--ink2)">'+s.l+'</span><span class="mono" style="font-weight:700">'+s.v+'</span></div>';
+  }).join('')||'<div style="color:var(--ink4);font-size:12px">No data yet</div>';
+  var trend=SCANS.slice().sort(function(a,b){return new Date(a.scannedAt)-new Date(b.scannedAt);}).slice(-6).map(function(s){return s.score;});
+  if(trend.length<2)trend=[avgScore,avgScore];
+  drawSpark('trendSpark',trend,'#5468ff');
+}
+function drawRiskDonut(segs){
+  var r=40,cx=48,circ=2*Math.PI*r,gap=segs.length>1?4:0;
+  var total=segs.reduce(function(a,s){return a+s.v;},0)||1;
+  var sLen=(circ-gap*segs.length)/segs.length;
+  var svg='<circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var(--surf3)" stroke-width="12"/>';
+  var off=0;
+  segs.forEach(function(s){
+    var frac=s.v/total;
+    var filled=circ*frac-(segs.length>1?gap:0);
+    svg+='<circle cx="48" cy="48" r="'+r+'" fill="none" stroke="'+s.c+'" stroke-width="12" stroke-dasharray="'+Math.max(0,filled)+' '+(circ-Math.max(0,filled))+'" stroke-dashoffset="'+(-off)+'" stroke-linecap="round" transform="rotate(-90 48 48)"/>';
+    off+=circ*frac;
+  });
+  document.getElementById('riskDonut').innerHTML=svg;
+}
+function timeAgo(iso){
+  var d=Math.round((Date.now()-new Date(iso))/3600000);
+  if(d<1)return'Just now';
+  if(d<24)return d+'h ago';
+  return Math.round(d/24)+'d ago';
+}
+
+/* ══════════════════════════════════════════════════════
+   SCANNER
+   ══════════════════════════════════════════════════════ */
+var SCAN_STEP_LABELS=['Checking website availability...','Checking Privacy Policy...','Checking Cookie Policy...','Checking Consent Banner...','Checking Security Headers...','Checking SSL Certificate...','Checking Forms & Data Collection...','Running AI Analysis...','Generating Report...'];
+function runScan(){
+  var url=document.getElementById('scannerUrlInput').value;
+  if(!url){toast('Enter a website URL first');return;}
+  var wrap=document.getElementById('scanProgressWrap');
+  var stepsEl=document.getElementById('scanSteps');
+  wrap.classList.add('on');
+  stepsEl.innerHTML='';
+  SCAN_STEP_LABELS.forEach(function(label,i){
+    setTimeout(function(){
+      var row=document.createElement('div');
+      row.className='scan-step';
+      row.innerHTML='<div class="step-spin"></div><span class="scan-step-label">'+label+'</span>';
+      stepsEl.appendChild(row);
+      setTimeout(function(){row.querySelector('.step-spin').outerHTML='<span class="step-check">✓</span>';},420);
+      if(i===SCAN_STEP_LABELS.length-1){
+        setTimeout(function(){
+          var scan=generateScan(url);
+          SCANS.unshift(scan);
+          wrap.classList.remove('on');
+          document.getElementById('scannerUrlInput').value='';
+          openReport(scan.id);
+          toast('✅ Scan complete — '+scan.domain+' scored '+scan.score+'/100');
+        },600);
+      }
+    },i*520);
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   REPORT VIEW
+   ══════════════════════════════════════════════════════ */
+function openReport(id){
+  currentReportId=id;
+  switchApp('report');
+}
+function renderReport(){
+  var s=SCANS.find(function(x){return x.id===currentReportId;});
+  if(!s){document.getElementById('reportBody').innerHTML='<div style="text-align:center;padding:60px;color:var(--ink4)">No report selected. Run a scan first.</div>';return;}
+  var r=100,circ=2*Math.PI*r/2.4,filled=Math.round(circ*s.score/100);
+  var html='<div class="rpt-head card">'+
+    '<div class="rpt-dial"><svg viewBox="0 0 104 104" width="104" height="104"><circle cx="52" cy="52" r="44" fill="none" stroke="var(--surf3)" stroke-width="9"/><circle cx="52" cy="52" r="44" fill="none" stroke="'+s.riskColor+'" stroke-width="9" stroke-dasharray="'+Math.round(2*Math.PI*44*s.score/100)+' '+Math.round(2*Math.PI*44)+'" stroke-linecap="round"/></svg><div class="rpt-dial-n"><b style="color:'+s.riskColor+'">'+s.score+'</b><span>/ 100</span></div></div>'+
+    '<div style="flex:1;min-width:200px"><div style="font-family:var(--disp);font-weight:800;font-size:19px">'+s.domain+'</div>'+
+    '<div style="font-size:12px;color:var(--ink4);margin:4px 0 10px" class="mono">'+s.url+'</div>'+
+    '<span class="pill" style="background:'+s.riskColor+'22;color:'+s.riskColor+'">● '+s.risk+'</span>'+
+    '<span class="pill" style="background:var(--surf2);color:var(--ink3);margin-left:8px">Scanned '+timeAgo(s.scannedAt)+'</span></div>'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-outline btn-sm" onclick="window.print()">⬇ Export PDF</button><button class="btn btn-outline btn-sm" onclick="exportReportCSV(\''+s.id+'\')">⬇ Export CSV</button><button class="btn btn-grad btn-sm" onclick="switchApp(\'scanner\')">↻ Re-scan</button></div>'+
+    '</div>';
+  html+='<div class="row2">';
+  html+='<div class="card"><div class="ph2"><span class="ph2-t">Category Breakdown</span></div><div class="pcb">'+
+    s.categories.map(function(c){
+      var col=c.pct>=80?'#21e6c1':c.pct>=50?'#5468ff':c.pct>=30?'#ffb020':'#ff5470';
+      return '<div class="cat-bar-row"><span class="cat-bar-label">'+c.icon+' '+c.name+'</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:'+c.pct+'%;background:'+col+'"></div></div><span class="cat-bar-n mono">'+c.passed+'/'+c.total+'</span></div>';
+    }).join('')+'</div></div>';
+  html+='<div class="card"><div class="ph2"><span class="ph2-t">🤖 AI Compliance Summary</span></div><div class="ai-summary">'+s.summary.replace(/\n/g,'<br>')+'</div></div>';
+  html+='</div>';
+  html+='<div class="card"><div class="ph2"><span class="ph2-t">Full Compliance Matrix</span><span class="ph2-s">'+s.categories.reduce(function(a,c){return a+c.passed;},0)+' / '+TOTAL_CHECKS+' checks passed</span></div>';
+  s.categories.forEach(function(c){
+    html+='<div class="chk-group-h">'+c.icon+' '+c.name+'</div>';
+    c.checks.forEach(function(chk){
+      html+='<div class="chk-row"><div class="chk-ic" style="background:'+(chk.pass?'var(--cyanl);color:var(--cyan)':'var(--corall);color:var(--coral)')+'">'+(chk.pass?'✓':'✕')+'</div><span class="chk-txt">'+chk.t+'</span></div>';
+    });
+  });
+  html+='</div>';
+  document.getElementById('reportBody').innerHTML=html;
+}
+function downloadBlob(filename,content,type){
+  var blob=new Blob([content],{type:type||'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function csvEsc(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function toCSV(rows){return rows.map(function(r){return r.map(csvEsc).join(',');}).join('\n');}
+function exportReportCSV(id){
+  var s=SCANS.find(function(x){return x.id===id;}); if(!s)return;
+  var rows=[['Category','Check','Result']];
+  s.categories.forEach(function(c){c.checks.forEach(function(chk){rows.push([c.name,chk.t,chk.pass?'Pass':'Fail']);});});
+  downloadBlob('vidhaan-report-'+s.domain+'.csv',toCSV(rows));
+  toast('⬇️ Report CSV downloaded');
+}
+function exportAllScans(){
+  downloadBlob('vidhaan-scans-backup.json',JSON.stringify(SCANS,null,2),'application/json');
+  toast('⬇️ All scans exported as JSON');
+}
+function clearHistory(){
+  if(!confirm('Delete all scan history? This cannot be undone.'))return;
+  SCANS=[];
+  renderHistory();renderDashboard();
+  toast('Scan history cleared');
+}
+
+/* ══════════════════════════════════════════════════════
+   HISTORY
+   ══════════════════════════════════════════════════════ */
+function renderHistory(){
+  var search=(document.getElementById('histSearch').value||'').toLowerCase();
+  var list=SCANS.filter(function(s){return !search||s.domain.toLowerCase().indexOf(search)>=0;}).sort(function(a,b){return new Date(b.scannedAt)-new Date(a.scannedAt);});
+  document.getElementById('histTbody').innerHTML=list.length?list.map(function(s){
+    var checked=histSelected.has(s.id);
+    return '<tr><td><input type="checkbox" '+(checked?'checked':'')+' onchange="toggleHistSelect(\''+s.id+'\')"></td>'+
+      '<td style="cursor:pointer" onclick="openReport(\''+s.id+'\')"><b>'+s.domain+'</b><div class="mono" style="font-size:10.5px;color:var(--ink4)">'+s.url+'</div></td>'+
+      '<td style="font-family:var(--mono);font-weight:700;color:'+s.riskColor+'">'+s.score+'</td>'+
+      '<td><span class="pill" style="background:'+s.riskColor+'22;color:'+s.riskColor+'">'+s.risk+'</span></td>'+
+      '<td style="color:var(--ink4)">'+timeAgo(s.scannedAt)+'</td>'+
+      '<td><button class="btn btn-ghost btn-sm" onclick="openReport(\''+s.id+'\')">View</button> <button class="btn btn-outline btn-sm" style="color:var(--coral)" onclick="deleteScan(\''+s.id+'\')">🗑</button></td></tr>';
+  }).join(''):'<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--ink4)">No scans found</td></tr>';
+  var btn=document.getElementById('compareBtn');
+  btn.textContent='⇄ Compare ('+histSelected.size+')';
+  btn.disabled=histSelected.size!==2;
+}
+function toggleHistSelect(id){
+  if(histSelected.has(id))histSelected.delete(id);
+  else{if(histSelected.size>=2)histSelected.delete(Array.from(histSelected)[0]);histSelected.add(id);}
+  renderHistory();
+}
+function deleteScan(id){
+  SCANS=SCANS.filter(function(s){return s.id!==id;});
+  histSelected.delete(id);
+  renderHistory();renderDashboard();
+  toast('Scan removed');
+}
+function compareSelected(){
+  var ids=Array.from(histSelected);
+  if(ids.length!==2)return;
+  var a=SCANS.find(function(s){return s.id===ids[0];}),b=SCANS.find(function(s){return s.id===ids[1];});
+  toast(a.domain+' ('+a.score+') vs '+b.domain+' ('+b.score+') — '+(a.score>b.score?a.domain+' scores higher':b.score>a.score?b.domain+' scores higher':'Tied score'));
+}
+
+/* ══════════════════════════════════════════════════════
+   REPORTS GRID (list of report cards)
+   ══════════════════════════════════════════════════════ */
+function renderReportsGrid(){
+  document.getElementById('reportsGrid').innerHTML=SCANS.slice().sort(function(a,b){return new Date(b.scannedAt)-new Date(a.scannedAt);}).map(function(s){
+    return '<div class="card" style="padding:18px;cursor:pointer" onclick="openReport(\''+s.id+'\')"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><b style="font-family:var(--disp)">'+s.domain+'</b><span style="font-family:var(--disp);font-weight:800;color:'+s.riskColor+'">'+s.score+'</span></div><span class="pill" style="background:'+s.riskColor+'22;color:'+s.riskColor+'">'+s.risk+'</span><div style="font-size:11px;color:var(--ink4);margin-top:10px">'+timeAgo(s.scannedAt)+'</div></div>';
+  }).join('')||'<div style="color:var(--ink4)">No reports yet</div>';
+}
+
+/* ══════════════════════════════════════════════════════
+   SETTINGS / PROFILE
+   ══════════════════════════════════════════════════════ */
+function saveProfile(){
+  var name=document.getElementById('profName').value||'Sarah Anand';
+  document.getElementById('sbUname').textContent=name;
+  document.getElementById('sbUav').textContent=name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+  toast('✅ Profile updated');
+}
+
+/* ══════════════════════════════════════════════════════
+   ADMIN
+   ══════════════════════════════════════════════════════ */
+var ADMIN_USERS=[
+  {n:'Sarah Anand',org:'NimbusPay',plan:'Growth',scans:14,status:'Active'},
+  {n:'Rahul Mehta',org:'Kosha Health',plan:'Enterprise',scans:41,status:'Active'},
+  {n:'Ayesha Khan',org:'Rupeeka',plan:'Starter',scans:2,status:'Trial'},
+  {n:'Vikram Rao',org:'Trellis Logistics',plan:'Growth',scans:9,status:'Active'},
+  {n:'Meera Iyer',org:'Aster Retail',plan:'Starter',scans:0,status:'Inactive'},
+];
+var ADMIN_LOGS=['[INFO] Scan completed for nimbuspay.in — score 82','[WARN] Rate limit approached for user rahul@koshahealth.in','[INFO] New user registered — ayesha@rupeeka.com','[ERROR] Timeout fetching SSL cert for slowsite.example','[INFO] Weekly digest emails sent — 214 recipients'];
+function renderAdmin(){
+  var kpis=[
+    {l:'Total Users',n:ADMIN_USERS.length,co:'var(--indigo)'},
+    {l:'Scans This Month',n:342,co:'var(--cyan)'},
+    {l:'API Requests (24h)',n:'1,284',co:'var(--violet)'},
+    {l:'Error Rate',n:'0.4%',co:'var(--coral)'},
+  ];
+  document.getElementById('adminKpis').innerHTML=kpis.map(function(k){
+    return '<div class="kpi card"><div class="kpi-n" style="color:'+k.co+'">'+k.n+'</div><div class="kpi-l">'+k.l+'</div></div>';
+  }).join('');
+  document.getElementById('adminUsersTbody').innerHTML=ADMIN_USERS.map(function(u){
+    var col=u.status==='Active'?'var(--cyan)':u.status==='Trial'?'var(--amber)':'var(--ink4)';
+    return '<tr><td><b>'+u.n+'</b></td><td>'+u.org+'</td><td>'+u.plan+'</td><td>'+u.scans+'</td><td><span class="pill" style="background:'+col+'22;color:'+col+'">'+u.status+'</span></td></tr>';
+  }).join('');
+  document.getElementById('adminLogs').innerHTML=ADMIN_LOGS.map(function(l){return '<div>'+l+'</div>';}).join('');
+}
+
+/* Initial */
+renderAccentSwatches(0);
+</script>
+</body>
+</html>
